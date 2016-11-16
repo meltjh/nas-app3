@@ -1,5 +1,5 @@
 //
-//  FirstViewController.swift
+//  SecondViewController.swift
 //  melissatjhia-pset3
 //
 //  Created by Melissa Tjhia on 16-11-16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirstViewController: UIViewController {
+class SavedViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
