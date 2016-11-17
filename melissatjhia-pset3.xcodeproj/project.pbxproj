@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F016E4671DDDFF45006EF860 /* SingleResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F016E4661DDDFF45006EF860 /* SingleResultTableViewCell.swift */; };
 		F0D5EA4C1DDC859B0074913A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D5EA4B1DDC859B0074913A /* AppDelegate.swift */; };
 		F0D5EA4E1DDC859B0074913A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D5EA4D1DDC859B0074913A /* SearchViewController.swift */; };
 		F0D5EA501DDC859B0074913A /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D5EA4F1DDC859B0074913A /* SavedViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F016E4661DDDFF45006EF860 /* SingleResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleResultTableViewCell.swift; sourceTree = "<group>"; };
 		F0D5EA481DDC859B0074913A /* melissatjhia-pset3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "melissatjhia-pset3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D5EA4B1DDC859B0074913A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0D5EA4D1DDC859B0074913A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				F0D5EA4D1DDC859B0074913A /* SearchViewController.swift */,
 				F0D5EA4F1DDC859B0074913A /* SavedViewController.swift */,
 				F0D5EA511DDC859B0074913A /* Main.storyboard */,
+				F016E4661DDDFF45006EF860 /* SingleResultTableViewCell.swift */,
 				F0D5EA5F1DDC8DFB0074913A /* DetailedViewController.swift */,
 				F0D5EA541DDC859B0074913A /* Assets.xcassets */,
 				F0D5EA561DDC859B0074913A /* LaunchScreen.storyboard */,
@@ -145,6 +148,7 @@
 			files = (
 				F0D5EA501DDC859B0074913A /* SavedViewController.swift in Sources */,
 				F0D5EA4C1DDC859B0074913A /* AppDelegate.swift in Sources */,
+				F016E4671DDDFF45006EF860 /* SingleResultTableViewCell.swift in Sources */,
 				F0D5EA601DDC8DFB0074913A /* DetailedViewController.swift in Sources */,
 				F0D5EA4E1DDC859B0074913A /* SearchViewController.swift in Sources */,
 			);
@@ -310,6 +314,7 @@
 				F0D5EA5E1DDC859B0074913A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

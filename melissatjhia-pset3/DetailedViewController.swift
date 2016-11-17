@@ -19,9 +19,6 @@ class DetailedViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let title = "twilight"
-        getData(urlString: "https://www.omdbapi.com/?t=" + title + "&y=&plot=full&r=json")
-
         // Do any additional setup after loading the view.
     }
 
@@ -30,7 +27,9 @@ class DetailedViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func getData(urlString: String) {
+    func getData(id: String) {
+        let urlString = "https://www.omdbapi.com/?i=" + id + "&y=&plot=full&r=json"
+        print(urlString)
         let request = URLRequest(url: URL(string: urlString)!)
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
                 // Guards execute when the condition is NOT met.
@@ -51,23 +50,22 @@ class DetailedViewController: UIViewController {
                         print("Error: " + (json["Error"]! as! String))
                     }
                     else {
-                        let title = json["Title"]!
-                        print(title)
                         self.title = json["Title"] as! String?
-                    }
-                // Get access to the main thread and the interface elements:
-                DispatchQueue.main.async {
 
-                    self.yearLabel.text = json["Year"] as! String?
-                    self.ratingLabel.text = json["imdbRating"] as! String?
-                    self.languageLabel.text = json["Language"] as! String?
-                    self.plotTextView.text = json["Plot"] as! String?
+                        // Get access to the main thread and the interface elements:
+                        DispatchQueue.main.async {
 
-                    if let url = NSURL(string: json["Poster"] as! String) {
-                        if let poster = NSData(contentsOf: url as URL) {
-                            self.posterImageView.image = UIImage(data: poster as Data)
+                            self.yearLabel.text = json["Year"] as! String?
+                            self.ratingLabel.text = json["imdbRating"] as! String?
+                            self.languageLabel.text = json["Language"] as! String?
+                            self.plotTextView.text = json["Plot"] as! String?
+
+                            if let url = NSURL(string: json["Poster"] as! String) {
+                                if let poster = NSData(contentsOf: url as URL) {
+                                    self.posterImageView.image = UIImage(data: poster as Data)
+                                }
+                            }
                         }
-                    }
                 }
             } catch {
                 // Error handling: what does the user expect when this fails?
