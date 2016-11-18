@@ -11,7 +11,7 @@ It can be removed by tapping the 'Remove' button.
 
 <img src="https://github.com/meltjh/nas-app3/raw/master/doc/add.png" width="250"> 
 
-The list with bookmarked movies/series can be seen in the Bookmarks tab.  
+The list with bookmarked movies/series and their ratings can be seen in the Bookmarks tab.  
 Again, it is possible to see more details by tapping on a movie/series.  
 
 <img src="https://github.com/meltjh/nas-app3/raw/master/doc/bookmarks.png" width="250">  
