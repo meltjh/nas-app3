@@ -4,6 +4,7 @@ The user uses the search bar in the Search tab to find the movies or series.
 A list of results are shown.  
 
 <img src="https://github.com/meltjh/nas-app3/raw/master/doc/search.png" width="250">  
+
 By tapping on a result, the user can read a description about the movie/series.   
 It is possible to bookmark the movie/series by tapping the 'Add' button.   
 It can be removed by tapping the 'Remove' button.  
