@@ -1,6 +1,6 @@
 # nas-app3
-This is the Watch List app, in which an user can bookmark the movies or series that he or she would like to see.   
-The user uses the search bar in the Search tab to find the movies or series.   
+This is the Watch List app, in which an user can bookmark the movies/series that he or she would like to see.   
+The user uses the search bar in the Search tab to find the movies/series.   
 A list of results are shown.  
 
 <img src="https://github.com/meltjh/nas-app3/raw/master/doc/search.png" width="250">  
