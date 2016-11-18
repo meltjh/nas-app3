@@ -25,10 +25,12 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.didReceiveMemoryWarning()
     }
     
+    /// Dismisses the keyboard when the 'Cancel' Button is clicked.
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
     
+    /// Dismisses the keyboard when the 'Seach' Button is clicked.
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
