@@ -25,6 +25,14 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.didReceiveMemoryWarning()
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+    
     /// Search for the input of the SearchBar.
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // For more than one search term.
