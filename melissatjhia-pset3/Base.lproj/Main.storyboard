@@ -47,7 +47,7 @@
                                         <rect key="frame" x="0.0" y="72" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="p3q-VD-VIf" id="1JX-NS-TXf">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xqc-Mh-tC2">
@@ -58,14 +58,14 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Da4-6r-2QB">
-                                                    <rect key="frame" x="126" y="8" width="241" height="21"/>
+                                                    <rect key="frame" x="125" y="8" width="241" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yTV-4E-2NA">
-                                                    <rect key="frame" x="126" y="37" width="49" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Year" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yTV-4E-2NA">
+                                                    <rect key="frame" x="125" y="37" width="49.5" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -80,8 +80,8 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="posterImageView" destination="xqc-Mh-tC2" id="Tgt-8E-k0j"/>
-                                            <outlet property="ratingLabel" destination="yTV-4E-2NA" id="WzS-lA-big"/>
                                             <outlet property="titleLabel" destination="Da4-6r-2QB" id="Z42-KW-dXK"/>
+                                            <outlet property="yearLabel" destination="yTV-4E-2NA" id="yr5-ML-WgF"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -158,8 +158,18 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VnG-UP-cb8">
-                                <rect key="frame" x="8" y="317" width="102" height="30"/>
-                                <state key="normal" title="Add this movie"/>
+                                <rect key="frame" x="8" y="317" width="30" height="30"/>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="addMovie:" destination="Q5a-uM-Yt8" eventType="touchDown" id="5Oh-Co-fN9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JRI-xB-MWR">
+                                <rect key="frame" x="8" y="355" width="55" height="30"/>
+                                <state key="normal" title="Remove"/>
+                                <connections>
+                                    <action selector="removeMovie:" destination="Q5a-uM-Yt8" eventType="touchDown" id="KKx-Um-zaE"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -168,6 +178,7 @@
                             <constraint firstItem="FCf-5w-sGE" firstAttribute="leading" secondItem="cDW-JV-EWf" secondAttribute="leading" constant="8" id="3rh-L7-NSI"/>
                             <constraint firstItem="IpV-Gv-Hh3" firstAttribute="top" secondItem="FCf-5w-sGE" secondAttribute="bottom" constant="8" id="46p-A3-CmO"/>
                             <constraint firstItem="FCf-5w-sGE" firstAttribute="top" secondItem="Xx7-Mw-kYY" secondAttribute="bottom" constant="8" id="9eu-XP-MjH"/>
+                            <constraint firstItem="JRI-xB-MWR" firstAttribute="top" secondItem="VnG-UP-cb8" secondAttribute="bottom" constant="8" id="E9U-hK-5hH"/>
                             <constraint firstItem="ibC-B9-F63" firstAttribute="top" secondItem="Xx7-Mw-kYY" secondAttribute="bottom" constant="8" id="JQG-kV-fwP"/>
                             <constraint firstItem="177-wE-GMW" firstAttribute="top" secondItem="mJN-TC-SN1" secondAttribute="bottom" constant="8" id="PPU-JW-AQI"/>
                             <constraint firstItem="mJN-TC-SN1" firstAttribute="top" secondItem="IpV-Gv-Hh3" secondAttribute="bottom" constant="8" id="UK6-mB-7rG"/>
@@ -178,6 +189,7 @@
                             <constraint firstItem="177-wE-GMW" firstAttribute="leading" secondItem="cDW-JV-EWf" secondAttribute="leading" constant="8" id="een-jy-MpC"/>
                             <constraint firstItem="ibC-B9-F63" firstAttribute="leading" secondItem="FCf-5w-sGE" secondAttribute="trailing" constant="8" id="gKd-Zx-Zyn"/>
                             <constraint firstItem="VnG-UP-cb8" firstAttribute="leading" secondItem="cDW-JV-EWf" secondAttribute="leading" constant="8" id="l82-fT-zFf"/>
+                            <constraint firstItem="JRI-xB-MWR" firstAttribute="leading" secondItem="cDW-JV-EWf" secondAttribute="leading" constant="8" id="o0H-Os-lbO"/>
                         </constraints>
                     </view>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -187,6 +199,7 @@
                         <outlet property="plotTextView" destination="ibC-B9-F63" id="pGF-8h-zGV"/>
                         <outlet property="posterImageView" destination="FCf-5w-sGE" id="3pW-bt-9gP"/>
                         <outlet property="ratingLabel" destination="mJN-TC-SN1" id="RFf-OJ-hPU"/>
+                        <outlet property="removeButton" destination="JRI-xB-MWR" id="XGs-JC-MYn"/>
                         <outlet property="yearLabel" destination="IpV-Gv-Hh3" id="kT9-4x-CVL"/>
                     </connections>
                 </viewController>

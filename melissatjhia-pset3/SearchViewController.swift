@@ -11,7 +11,7 @@ import UIKit
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var searchResultsTableView: UITableView!
-    var results: Dictionary<String, AnyObject> = [:]
+    var searchResults: [Dictionary<String, AnyObject>] = []
     var selectedId = ""
     
     override func viewDidLoad() {
@@ -30,22 +30,31 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     
     func tableView(_ didSelectRowAttableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let searchResults = self.results["Search"]!
-        let selectedResult = searchResults[indexPath.row] as! [String: Any]
-        selectedId = selectedResult["imdbID"] as! String
-        print(selectedId)
+        let cellInfo = searchResults[indexPath.row]
+        print(cellInfo)
+        selectedId = cellInfo["imdbID"] as! String
         self.performSegue(withIdentifier: "detailedResultSegue", sender: self)
-        
-        
+
     }
 
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.searchResultsTableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath) as! SingleResultTableViewCell
+        let cellInfo =  searchResults[indexPath.row]
+        cell.titleLabel.text = cellInfo["Title"] as! String?
+        cell.yearLabel.text = cellInfo["Year"] as! String?
+        
+        if let url = NSURL(string: cellInfo["Poster"] as! String) {
+            if let poster = NSData(contentsOf: url as URL) {
+                cell.posterImageView.image = UIImage(data: poster as Data)
+            }
+        }
+        
+        
         return cell
     }
     
@@ -71,7 +80,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     print("Error: " + (json["Error"]! as! String))
                 }
                 else {
-                    self.results = json
+                    self.searchResults = json["Search"]! as! [Dictionary<String, AnyObject>]
                     
                     // Get access to the main thread and the interface elements:
                     DispatchQueue.main.async {
