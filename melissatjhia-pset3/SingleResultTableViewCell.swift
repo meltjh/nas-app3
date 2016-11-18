@@ -10,6 +10,7 @@ import UIKit
 
 class SingleResultTableViewCell: UITableViewCell {
 
+    // Referencing outlets of the ImageViews and the Labels.
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
@@ -20,7 +21,5 @@ class SingleResultTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 }

@@ -21,11 +21,11 @@ class DetailedViewController: UIViewController {
     
     var movieInfo : Dictionary<String, AnyObject> = [:]
     var imdbID = ""
-    let defaults = UserDefaults.standard
     var watchList: [String]? = []
     
+    /// Reloads the data everytime the DetailedViewController is shown.
     override func viewWillAppear(_ animated: Bool) {
-        watchList = defaults.object(forKey: "WatchList") as? [String]
+        watchList = UserDefaults.standard.object(forKey: "WatchList") as? [String]
         
         if watchList == nil {
             watchList = []
@@ -39,41 +39,47 @@ class DetailedViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
+    /// Adds the movie to the Bookmarks when the 'Add' Button is clicked.
     @IBAction func addMovie(_ sender: Any) {
-        watchList = defaults.object(forKey: "WatchList") as? [String]
+        watchList = UserDefaults.standard.object(forKey: "WatchList") as? [String]
         
+        // Check if WatchList exists in the UserDefaults.
         if watchList != nil {
+            // Only add to Bookmarks if it is not already bookmarked.
             if !watchList!.contains(imdbID)  {
                 watchList!.append(imdbID)
-                defaults.set(watchList, forKey: "WatchList")
+                UserDefaults.standard.set(watchList, forKey: "WatchList")
             }
         }
         else {
             watchList = [imdbID]
-            defaults.set(watchList, forKey: "WatchList")
+            UserDefaults.standard.set(watchList, forKey: "WatchList")
         }
         changeButtonEnabledDisabled()
     }
     
+    /// Removes the movie from the Bookmarks when the 'Remove' Button is clicked.
     @IBAction func removeMovie(_ sender: Any) {
-        watchList = defaults.object(forKey: "WatchList") as? [String]
+        watchList = UserDefaults.standard.object(forKey: "WatchList") as? [String]
         
+        // Check if WatchList exists in the UserDefaults.
         if watchList != nil {
-            if watchList!.contains(imdbID)  {
+            // Only remove if it is in Bookmarks.
+            if watchList!.contains(imdbID) {
                 if let index = watchList?.index(of: imdbID) {
                     watchList?.remove(at: index)
-                    defaults.set(watchList, forKey: "WatchList")
+                    UserDefaults.standard.set(watchList, forKey: "WatchList")
                 }
             }
         }
         changeButtonEnabledDisabled()
     }
     
+    /// Enable or disable the 'Add' and 'Remove' Buttons according to if the movie is in the Bookmarks.
     func changeButtonEnabledDisabled() {
-        watchList = defaults.object(forKey: "WatchList") as? [String]
+        watchList = UserDefaults.standard.object(forKey: "WatchList") as? [String]
         
         if watchList != nil {
             if watchList!.contains(imdbID)  {
@@ -91,43 +97,47 @@ class DetailedViewController: UIViewController {
         }
     }
     
+    /// Empties the Labels in case of an error.
+    func changeToDefault() {
+        self.yearLabel.text = ""
+        self.ratingLabel.text = ""
+        self.typeLabel.text = ""
+        self.plotTextView.text = ""
+    }
     
+    /// Fills in the ImageView, Label and TextView with the data that belongs to the movie.
     func getData(id: String) {
         let urlString = "https://www.omdbapi.com/?i=" + id + "&y=&plot=full&r=json"
         let request = URLRequest(url: URL(string: urlString)!)
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             // Guards execute when the condition is NOT met.
             guard let data = data, error == nil else {
-                let httpResponse = response as? HTTPURLResponse
-                print("Status code: (\(httpResponse?.statusCode))")
-                
-                // Error handling: what does the user expect when this fails?
+                self.changeToDefault()
                 return
             }
             // Get access to the main thread and the interface elements:
             DispatchQueue.main.async {
                 do {
-                    
-                    // Convert data to json. (You’ll need the do-catch code for this part.)
+                    // Convert data to json.
                     let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
                     
-                    // Check if the response is true. (Was the movie found? What to do if not?)
+                    // Check if the response is true.
                     if json["Error"] != nil {
-                        print("Error: " + (json["Error"]! as! String))
+                        self.changeToDefault()
                     }
                     else {
+                        // Fill the ImageView, Labels and TextView with the movie data.
                         self.movieInfo = json
                         self.imdbID = self.movieInfo["imdbID"] as! String
                         self.title = json["Title"] as! String?
-                        
                         self.yearLabel.text = json["Year"] as! String?
                         self.ratingLabel.text = json["imdbRating"] as! String?
                         self.typeLabel.text = json["Type"] as! String?
                         self.plotTextView.text = json["Plot"] as! String?
-                        
                         self.posterImageView.image = nil
-
+                        
                         if let tempUrl = json["Poster"] as? String {
+                            // Urls with http do not return an image, should have https.
                             let url = NSURL(string: tempUrl.replacingOccurrences(of: "http:", with: "https:"))
                             if let poster = NSData(contentsOf: url as! URL) {
                                 self.posterImageView.image = UIImage(data: poster as Data)
@@ -135,7 +145,7 @@ class DetailedViewController: UIViewController {
                         }
                     }
                 } catch {
-                    // Error handling: what does the user expect when this fails?
+                    self.changeToDefault()
                 }
             }
         }).resume()
