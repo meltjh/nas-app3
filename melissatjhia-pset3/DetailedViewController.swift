@@ -9,92 +9,105 @@
 import UIKit
 
 class DetailedViewController: UIViewController {
-
+    
+    @IBOutlet var detailedView: UIView!
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var plotTextView: UITextView!
-    @IBOutlet weak var languageLabel: UILabel!
+    @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var removeButton: UIButton!
-
+    
     var movieInfo : Dictionary<String, AnyObject> = [:]
     var imdbID = ""
     let defaults = UserDefaults.standard
     var watchList: [String]? = []
     
+    override func viewWillAppear(_ animated: Bool) {
+        watchList = defaults.object(forKey: "WatchList") as? [String]
+        
+        if watchList == nil {
+            watchList = []
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("watchList")
-        print(watchList!)
-        // Do any additional setup after loading the view.
-        
-//        let defaults = UserDefaults.standard
-//        defaults.set(waarde, forKey: key)
-//        let defaults = UserDefaults.standard
-//        let waarde = defaults.bool(forKey: key)
+        changeButtonEnabledDisabled()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-//    @IBAction func addMovie(_ sender: Any) {
-//        let present = defaults.bool(forKey: imdbID)
-//        print("present" + String(present))
-//        defaults.set(true, forKey: imdbID)
-//    }
     
     @IBAction func addMovie(_ sender: Any) {
         watchList = defaults.object(forKey: "WatchList") as? [String]
-
-
         
         if watchList != nil {
-            print("Before")
-            print(watchList!)
             if !watchList!.contains(imdbID)  {
                 watchList!.append(imdbID)
-                defaults.set(watchList, forKey: imdbID)
+                defaults.set(watchList, forKey: "WatchList")
             }
         }
         else {
             watchList = [imdbID]
-            defaults.set(watchList, forKey: imdbID)
+            defaults.set(watchList, forKey: "WatchList")
         }
-        print("After")
-        print(watchList)
-
-//        print("defaults")
-//        print(UserDefaults.standard.dictionaryRepresentation().keys)
+        changeButtonEnabledDisabled()
     }
     
     @IBAction func removeMovie(_ sender: Any) {
-//        let present = defaults.bool(forKey: imdbID)
-//        if present == true {
-//            defaults.removeObject(forKey: imdbID)
-//        }
-        print("defaults")
-        print(UserDefaults.standard.dictionaryRepresentation().keys)
+        watchList = defaults.object(forKey: "WatchList") as? [String]
+        
+        if watchList != nil {
+            if watchList!.contains(imdbID)  {
+                if let index = watchList?.index(of: imdbID) {
+                    watchList?.remove(at: index)
+                    defaults.set(watchList, forKey: "WatchList")
+                }
+            }
+        }
+        changeButtonEnabledDisabled()
+    }
+    
+    func changeButtonEnabledDisabled() {
+        watchList = defaults.object(forKey: "WatchList") as? [String]
+        
+        if watchList != nil {
+            if watchList!.contains(imdbID)  {
+                addButton.isEnabled = false
+                removeButton.isEnabled = true
+            }
+            else {
+                addButton.isEnabled = true
+                removeButton.isEnabled = false
+            }
+        }
+        else {
+            addButton.isEnabled = true
+            removeButton.isEnabled = false
+        }
     }
     
     
     func getData(id: String) {
         let urlString = "https://www.omdbapi.com/?i=" + id + "&y=&plot=full&r=json"
-        print(urlString)
         let request = URLRequest(url: URL(string: urlString)!)
         URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-                // Guards execute when the condition is NOT met.
-                guard let data = data, error == nil else {
-                    let httpResponse = response as? HTTPURLResponse
-                    print("Status code: (\(httpResponse?.statusCode))")
-
-                    // Error handling: what does the user expect when this fails?
-                    return
-                }
-            do {
-
+            // Guards execute when the condition is NOT met.
+            guard let data = data, error == nil else {
+                let httpResponse = response as? HTTPURLResponse
+                print("Status code: (\(httpResponse?.statusCode))")
+                
+                // Error handling: what does the user expect when this fails?
+                return
+            }
+            // Get access to the main thread and the interface elements:
+            DispatchQueue.main.async {
+                do {
+                    
                     // Convert data to json. (You’ll need the do-catch code for this part.)
                     let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
                     
@@ -106,36 +119,25 @@ class DetailedViewController: UIViewController {
                         self.movieInfo = json
                         self.imdbID = self.movieInfo["imdbID"] as! String
                         self.title = json["Title"] as! String?
+                        
+                        self.yearLabel.text = json["Year"] as! String?
+                        self.ratingLabel.text = json["imdbRating"] as! String?
+                        self.typeLabel.text = json["Type"] as! String?
+                        self.plotTextView.text = json["Plot"] as! String?
+                        
+                        self.posterImageView.image = nil
 
-                        // Get access to the main thread and the interface elements:
-                        DispatchQueue.main.async {
-
-                            self.yearLabel.text = json["Year"] as! String?
-                            self.ratingLabel.text = json["imdbRating"] as! String?
-                            self.languageLabel.text = json["Language"] as! String?
-                            self.plotTextView.text = json["Plot"] as! String?
-
-                            if let url = NSURL(string: json["Poster"] as! String) {
-                                if let poster = NSData(contentsOf: url as URL) {
-                                    self.posterImageView.image = UIImage(data: poster as Data)
-                                }
+                        if let tempUrl = json["Poster"] as? String {
+                            let url = NSURL(string: tempUrl.replacingOccurrences(of: "http:", with: "https:"))
+                            if let poster = NSData(contentsOf: url as! URL) {
+                                self.posterImageView.image = UIImage(data: poster as Data)
                             }
                         }
+                    }
+                } catch {
+                    // Error handling: what does the user expect when this fails?
                 }
-            } catch {
-                // Error handling: what does the user expect when this fails?
             }
         }).resume()
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

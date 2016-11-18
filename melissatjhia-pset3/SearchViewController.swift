@@ -9,7 +9,7 @@
 import UIKit
 
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     @IBOutlet weak var searchResultsTableView: UITableView!
     var searchResults: [Dictionary<String, AnyObject>] = []
     var selectedId = ""
@@ -18,25 +18,23 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewDidLoad()
         searchResultsTableView.rowHeight = UITableViewAutomaticDimension
         searchResultsTableView.estimatedRowHeight = 300
-        let title = "Twilight"
+        let title = "Melissa"
         getData(urlString: "https://www.omdbapi.com/?s=" + title)
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     
     func tableView(_ didSelectRowAttableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellInfo = searchResults[indexPath.row]
-        print(cellInfo)
         selectedId = cellInfo["imdbID"] as! String
         self.performSegue(withIdentifier: "detailedResultSegue", sender: self)
-
+        
     }
-
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
@@ -48,12 +46,14 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.titleLabel.text = cellInfo["Title"] as! String?
         cell.yearLabel.text = cellInfo["Year"] as! String?
         
-        if let url = NSURL(string: cellInfo["Poster"] as! String) {
-            if let poster = NSData(contentsOf: url as URL) {
+        cell.posterImageView.image = nil
+
+        if let tempUrl = cellInfo["Poster"] as? String {
+            let url = NSURL(string: tempUrl.replacingOccurrences(of: "http:", with: "https:"))
+            if let poster = NSData(contentsOf: url as! URL) {
                 cell.posterImageView.image = UIImage(data: poster as Data)
             }
         }
-        
         
         return cell
     }
@@ -70,32 +70,36 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 // Error handling: what does the user expect when this fails?
                 return
             }
-            do {
-                
-                // Convert data to json. (You’ll need the do-catch code for this part.)
-                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
-                
-                // Check if the response is true. (Was the movie found? What to do if not?)
-                if json["Error"] != nil {
-                    print("Error: " + (json["Error"]! as! String))
-                }
-                else {
-                    self.searchResults = json["Search"]! as! [Dictionary<String, AnyObject>]
+            
+            // Get access to the main thread and the interface elements:
+            DispatchQueue.main.async {
+                do {
                     
-                    // Get access to the main thread and the interface elements:
-                    DispatchQueue.main.async {
-                        print("hi")
+                    // Convert data to json. (You’ll need the do-catch code for this part.)
+                    let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+                    
+                    // Check if the response is true. (Was the movie found? What to do if not?)
+                    if json["Error"] != nil {
+                        print("Error: " + (json["Error"]! as! String))
                     }
+                    else {
+                        self.searchResults = json["Search"]! as! [Dictionary<String, AnyObject>]
+                    }
+                } catch {
+                    // Error handling: what does the user expect when this fails?
                 }
-            } catch {
-                // Error handling: what does the user expect when this fails?
+                
+                self.searchResultsTableView.reloadData()
             }
+            
         }).resume()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-      if let vc = segue.destination as? DetailedViewController {
-        vc.getData(id: selectedId)
+        if let vc = segue.destination as?
+            DetailedViewController {
+            vc.imdbID = selectedId
+            vc.getData(id: selectedId)
         }
     }
 }
